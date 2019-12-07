@@ -1,0 +1,134 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>io.openslice</groupId>
+		<artifactId>io.openslice.main</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../../git/io.openslice.main</relativePath>
+	</parent>
+
+	<artifactId>io.openslice.cli</artifactId>
+	<name>io.openslice.cli</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<spring.boot-version>${spring-boot-version}</spring.boot-version>
+		<spring.cloud-consul-version>${spring-cloud-consul-version}</spring.cloud-consul-version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- Spring Boot BOM -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring.boot-version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		
+
+
+		</dependencies>
+
+	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		
+		
+		<dependency>
+			<groupId>io.openslice</groupId>
+			<artifactId>io.openslice.tmf.api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+		</dependency>
+
+
+	</dependencies>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.8</source>
+						<target>1.8</target>
+					</configuration>
+				</plugin>
+				<!-- 
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.0.0-M8</version>
+				</plugin>
+ 				-->
+ 				
+				<plugin>
+					<!-- run mvn license:update-file-header to manually update all headers 
+						everywhere -->
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>license-maven-plugin</artifactId>
+					<version>${maven-license-plugin.version}</version>
+					<configuration>
+						<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+						<processStartTag>========================LICENSE_START=================================</processStartTag>
+						<processEndTag>=========================LICENSE_END==================================</processEndTag>
+						<excludes>*.json</excludes>
+					</configuration>
+					<executions>
+						<execution>
+							<id>generate-license-headers</id>
+							<goals>
+								<goal>update-file-header</goal>
+							</goals>
+							<phase>process-sources</phase>
+							<configuration>
+								<licenseName>${license.licenseName}</licenseName>
+
+							</configuration>
+						</execution>
+						<execution>
+							<id>download-licenses</id>
+							<goals>
+								<goal>download-licenses</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${spring-boot-version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+	</build>
+
+
+
+</project>

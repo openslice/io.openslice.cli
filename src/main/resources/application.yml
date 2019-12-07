@@ -1,0 +1,19 @@
+
+# For Spring Actuator /info endpoint
+info:
+    artifact: cli-service
+    name: cli-service
+    description: Spring cli-service
+    version: 1.0.0
+
+server:
+  port: 13385
+
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+    file: "%d %p %c{1.} [%t] %m%n"
+     
