@@ -60,9 +60,9 @@ public class SpringBootConsoleApplication implements CommandLineRunner {
 		}
 		
 		RestTemplate restTemplate = new RestTemplate();
-		HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(); //this is used for pach with apache http, see pom
-		restTemplate.setRequestFactory(requestFactory);
-		
+//		HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(); //this is used for pach with apache http, see pom
+//		restTemplate.setRequestFactory(requestFactory);
+//		
 //		ResponseEntity<ServiceCatalog[]> response = restTemplate.getForEntity(
 //				"http://localhost:13082/tmf-api/serviceCatalogManagement/v4/serviceCatalog", ServiceCatalog[].class);
 //
@@ -91,13 +91,13 @@ public class SpringBootConsoleApplication implements CommandLineRunner {
 //		/**
 //		 * create service order
 //		 */
-//		ServiceOrderCreate servOrder = new ServiceOrderCreate();
-//		Note noteItem = new Note();
-//		noteItem.text("test note");
-//		servOrder.addNoteItem(noteItem);
+//		ServiceOrderCreate servOrderCre = new ServiceOrderCreate();
+//		Note noteItemC = new Note();
+//		noteItemC.text("test note");
+//		servOrderCre.addNoteItem(noteItemC);
 //		
 //		ServiceOrderItem soi = new ServiceOrderItem();
-//		servOrder.getOrderItem().add(soi);
+//		servOrderCre.getOrderItem().add(soi);
 //		
 //		ServiceRestriction serviceRestriction = new ServiceRestriction();
 //		ServiceSpecificationRef aServiceSpecificationRef = new ServiceSpecificationRef();
@@ -106,13 +106,13 @@ public class SpringBootConsoleApplication implements CommandLineRunner {
 //		serviceRestriction.setServiceSpecification(aServiceSpecificationRef );
 //		soi.setService(serviceRestriction );
 //		
-//		HttpEntity<ServiceOrderCreate> request = new HttpEntity<>( servOrder );
+//		HttpEntity<ServiceOrderCreate> request = new HttpEntity<>( servOrderCre );
 //		ResponseEntity<ServiceOrder> responseOrder = restTemplate.postForEntity(
 //				"http://localhost:13082/tmf-api/serviceOrdering/v4/serviceOrder",
 //				request,
 //				ServiceOrder.class);
 //
-//		ServiceOrder sor = responseOrder.getBody();
+//		//ServiceOrder sor = responseOrder.getBody();
 
 		ResponseEntity<ServiceOrder[]> responseServiceOrderList = restTemplate.getForEntity(
 				"http://localhost:13082/tmf-api/serviceOrdering/v4/serviceOrder",
@@ -129,10 +129,10 @@ public class SpringBootConsoleApplication implements CommandLineRunner {
 				Note noteItem = new Note();
 				noteItem.text("Order accepted");
 				servOrder.addNoteItem(noteItem);
-				HttpEntity<ServiceOrderUpdate> request = new HttpEntity<>( servOrder );
-				ServiceOrder responseOrder = restTemplate.patchForObject(
+				HttpEntity<ServiceOrderUpdate> requestSo = new HttpEntity<>( servOrder );
+				ServiceOrder responseSoOrder = restTemplate.patchForObject(
 						"http://localhost:13082/tmf-api/serviceOrdering/v4/serviceOrder/" + s.getId(),
-						request,
+						requestSo,
 						ServiceOrder.class);
 			}
 		});
