@@ -30,7 +30,7 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-		
+
 
 
 		</dependencies>
@@ -42,20 +42,31 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		
-		
+
+
 		<dependency>
 			<groupId>io.openslice</groupId>
 			<artifactId>io.openslice.tmf.api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
-		
+
+
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 		</dependency>
 
+		<!-- http client -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
 	</dependencies>
 
@@ -70,14 +81,9 @@
 						<target>1.8</target>
 					</configuration>
 				</plugin>
-				<!-- 
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>3.0.0-M8</version>
-				</plugin>
- 				-->
- 				
+				<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-surefire-plugin</artifactId> 
+					<version>3.0.0-M8</version> </plugin> -->
+
 				<plugin>
 					<!-- run mvn license:update-file-header to manually update all headers 
 						everywhere -->
