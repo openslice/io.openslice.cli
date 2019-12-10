@@ -20,6 +20,7 @@ import io.openslice.tmf.common.model.service.Note;
 import io.openslice.tmf.common.model.service.ServiceSpecificationRef;
 import io.openslice.tmf.scm633.model.ServiceCatalog;
 import io.openslice.tmf.scm633.model.ServiceSpecification;
+import io.openslice.tmf.sim638.model.Service;
 import io.openslice.tmf.so641.model.ServiceOrder;
 import io.openslice.tmf.so641.model.ServiceOrderCreate;
 import io.openslice.tmf.so641.model.ServiceOrderItem;
@@ -82,7 +83,7 @@ public class SpringBootConsoleApplication implements CommandLineRunner {
 //		System.out.printf(  "--------------SERVICE SPECS------------------ \n" );
 //		System.out.printf(  "| %40s | %40s \n", "id/uuid", "service spec name" );
 //		asList(sp).forEach((s) -> {
-//			System.out.printf(  "| %40s | 40s \n", s.getId(), s.getName() );
+//			System.out.printf(  "| %40s | %40s \n", s.getId(), s.getName() );
 //			if ( s.getName().equals("A VINNI Service Example")) {
 //				specToOrder = s;
 //			}
@@ -112,40 +113,52 @@ public class SpringBootConsoleApplication implements CommandLineRunner {
 //				request,
 //				ServiceOrder.class);
 //
-//		//ServiceOrder sor = responseOrder.getBody();
-
-		ResponseEntity<ServiceOrder[]> responseServiceOrderList = restTemplate.getForEntity(
-				"http://localhost:13082/tmf-api/serviceOrdering/v4/serviceOrder",
-				ServiceOrder[].class);
-
-		ServiceOrder sor[] = responseServiceOrderList.getBody();
-		System.out.printf(  "--------------SERVICE ORDER------------------ \n" );
-		System.out.printf(  "| %40s | %40s | %40s \n", "id/uuid", "service spec id", "status" );
-		asList(sor).forEach( (s) -> {
-			System.out.printf(  "| %40s | %40s \n", s.getId(),  (new ArrayList<>(s.getOrderItem())).get(0).getService().getServiceSpecification().getId(), s.getState()  );
-			if ( s.getState().equals( ServiceOrderStateType.INITIAL ) ) {
-				ServiceOrderUpdate servOrder = new ServiceOrderUpdate();
-				servOrder.setState( ServiceOrderStateType.ACKNOWLEDGED );
-				Note noteItem = new Note();
-				noteItem.text("Order accepted");
-				servOrder.addNoteItem(noteItem);
-				HttpEntity<ServiceOrderUpdate> requestSo = new HttpEntity<>( servOrder );
-				ServiceOrder responseSoOrder = restTemplate.patchForObject(
-						"http://localhost:13082/tmf-api/serviceOrdering/v4/serviceOrder/" + s.getId(),
-						requestSo,
-						ServiceOrder.class);
-			}
-		});
+//
+//		ResponseEntity<ServiceOrder[]> responseServiceOrderList = restTemplate.getForEntity(
+//				"http://localhost:13082/tmf-api/serviceOrdering/v4/serviceOrder",
+//				ServiceOrder[].class);
+//
+//		ServiceOrder sor[] = responseServiceOrderList.getBody();
+//		System.out.printf(  "--------------SERVICE ORDER------------------ \n" );
+//		System.out.printf(  "| %40s | %40s | %40s \n", "id/uuid", "service spec id", "status" );
+//		asList(sor).forEach( (s) -> {
+//			System.out.printf(  "| %40s | %40s | %40s \n", s.getId(),  (new ArrayList<>(s.getOrderItem())).get(0).getService().getServiceSpecification().getId(), s.getState()  );
+//			if ( s.getState().equals( ServiceOrderStateType.INITIAL ) ) {
+//				ServiceOrderUpdate servOrder = new ServiceOrderUpdate();
+//				servOrder.setState( ServiceOrderStateType.ACKNOWLEDGED );
+//				Note noteItem = new Note();
+//				noteItem.text("Order accepted");
+//				servOrder.addNoteItem(noteItem);
+//				HttpEntity<ServiceOrderUpdate> requestSo = new HttpEntity<>( servOrder );
+//				ServiceOrder responseSoOrder = restTemplate.patchForObject(
+//						"http://localhost:13082/tmf-api/serviceOrdering/v4/serviceOrder/" + s.getId(),
+//						requestSo,
+//						ServiceOrder.class);
+//			}
+//		});
+//		
+//		responseServiceOrderList = restTemplate.getForEntity(
+//				"http://localhost:13082/tmf-api/serviceOrdering/v4/serviceOrder",
+//				ServiceOrder[].class);
+//
+//		sor = responseServiceOrderList.getBody();
+//		System.out.printf(  "--------------SERVICE ORDER------------------ \n" );
+//		System.out.printf(  "| %40s | %40s | %40s \n", "id/uuid", "service spec id", "status" );
+//		asList(sor).forEach( (s) -> {
+//			System.out.printf(  "| %40s | %40s \n", s.getId(),  (new ArrayList<>(s.getOrderItem())).get(0).getService().getServiceSpecification().getId(), s.getState() );
+//		});
 		
-		responseServiceOrderList = restTemplate.getForEntity(
-				"http://localhost:13082/tmf-api/serviceOrdering/v4/serviceOrder",
-				ServiceOrder[].class);
-
-		sor = responseServiceOrderList.getBody();
-		System.out.printf(  "--------------SERVICE ORDER------------------ \n" );
-		System.out.printf(  "| %40s | %40s | %40s \n", "id/uuid", "service spec id", "status" );
-		asList(sor).forEach( (s) -> {
-			System.out.printf(  "| %40s | %40s \n", s.getId(),  (new ArrayList<>(s.getOrderItem())).get(0).getService().getServiceSpecification().getId(), s.getState() );
+		
+		//getservices
+		///serviceInventory/v4/
+		ResponseEntity<Service[]> responseServiceList = restTemplate.getForEntity(
+				"http://localhost:13082/tmf-api/serviceInventory/v4/service",
+				Service[].class);
+		Service services[] = responseServiceList.getBody();
+		System.out.printf(  "--------------SERVICES ------------------ \n" );
+		System.out.printf(  "| %40s | %40s | %40s | %40s \n", "id/uuid", "name", "order id", "status" );
+		asList( services ).forEach( (s) -> {
+			System.out.printf(  "| %40s | %40s | %40s | %40s \n", s.getId(), s.getName(),  (new ArrayList<>(s.getServiceOrder())).get(0).getId() , s.getState()  );
 		});
 		
 	}
