@@ -17,6 +17,7 @@ import static java.util.Arrays.asList;
 import java.util.ArrayList;
 
 import io.openslice.tmf.common.model.service.Note;
+import io.openslice.tmf.common.model.service.ServiceRef;
 import io.openslice.tmf.common.model.service.ServiceSpecificationRef;
 import io.openslice.tmf.scm633.model.ServiceCatalog;
 import io.openslice.tmf.scm633.model.ServiceSpecification;
@@ -137,16 +138,29 @@ public class SpringBootConsoleApplication implements CommandLineRunner {
 //			}
 //		});
 //		
-//		responseServiceOrderList = restTemplate.getForEntity(
-//				"http://localhost:13082/tmf-api/serviceOrdering/v4/serviceOrder",
-//				ServiceOrder[].class);
-//
-//		sor = responseServiceOrderList.getBody();
-//		System.out.printf(  "--------------SERVICE ORDER------------------ \n" );
-//		System.out.printf(  "| %40s | %40s | %40s \n", "id/uuid", "service spec id", "status" );
-//		asList(sor).forEach( (s) -> {
-//			System.out.printf(  "| %40s | %40s \n", s.getId(),  (new ArrayList<>(s.getOrderItem())).get(0).getService().getServiceSpecification().getId(), s.getState() );
-//		});
+		ResponseEntity<ServiceOrder[]> responseServiceOrderList2 = restTemplate.getForEntity(
+				"http://localhost:13082/tmf-api/serviceOrdering/v4/serviceOrder",
+				ServiceOrder[].class);
+
+		ServiceOrder sor2[] = responseServiceOrderList2.getBody();
+		System.out.printf(  "--------------SERVICE ORDER------------------ \n" );
+		System.out.printf(  "| %40s | %40s | %40s \n", "id/uuid", "service spec id", "status" );
+		asList(sor2).forEach( (s) -> {
+			System.out.printf(  "| %40s | %40s \n", s.getId(),   s.getState() );
+			
+			System.out.printf(  "\t--------------ORDER ITEM------------------ \n" );
+			System.out.printf(  "\t| %40s | %40s | %40s \n", "id/uuid",  "status", "ServiceName" );
+			for (ServiceOrderItem oi : s.getOrderItem()) {
+				System.out.printf(  "| %40s | %40s | %40s \n", oi.getId(),  oi.getState(), oi.getService().getName() );
+				System.out.printf(  "\t\t--------------Supporting Services------------------ \n" );
+				System.out.printf(  "\t\t| %40s | %40s \n", "id/uuid", "name" );
+				for (ServiceRef sups : oi.getService().getSupportingService()) {
+					System.out.printf(  "\t\\t| %40s | %40s  \n", sups.getId(),  sups.getName() );
+				}
+			}
+			
+			
+		});
 		
 		
 		//getservices
