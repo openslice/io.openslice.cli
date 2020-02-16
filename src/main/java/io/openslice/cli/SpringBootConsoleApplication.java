@@ -39,8 +39,11 @@ import io.openslice.tmf.so641.model.ServiceRestriction;
 @SpringBootApplication
 public class SpringBootConsoleApplication implements CommandLineRunner {
 
+	private static final String HOST = "portal.openslice.io";// "localhost:13082";
 	private static Logger LOG = LoggerFactory.getLogger(SpringBootConsoleApplication.class);
 
+	
+	
 	public static void main(String[] args) {
 		LOG.info("STARTING THE APPLICATION");
 		ConfigurableApplicationContext ctx = SpringApplication.run(SpringBootConsoleApplication.class, args);
@@ -66,7 +69,7 @@ public class SpringBootConsoleApplication implements CommandLineRunner {
 //		restTemplate.setRequestFactory(requestFactory);
 //		
 //		ResponseEntity<ServiceCatalog[]> response = restTemplate.getForEntity(
-//				"http://localhost:13082/tmf-api/serviceCatalogManagement/v4/serviceCatalog", ServiceCatalog[].class);
+//				"http://"+HOST+"/tmf-api/serviceCatalogManagement/v4/serviceCatalog", ServiceCatalog[].class);
 //
 //		ServiceCatalog[] sc = response.getBody();
 //
@@ -76,7 +79,7 @@ public class SpringBootConsoleApplication implements CommandLineRunner {
 //		});
 //
 //		ResponseEntity<ServiceSpecification[]> response2 = restTemplate.getForEntity(
-//				"http://localhost:13082/tmf-api/serviceCatalogManagement/v4/serviceSpecification",
+//				"http://"+HOST+"/tmf-api/serviceCatalogManagement/v4/serviceSpecification",
 //				ServiceSpecification[].class);
 //
 //		ServiceSpecification[] sp = response2.getBody();
@@ -89,7 +92,7 @@ public class SpringBootConsoleApplication implements CommandLineRunner {
 //				specToOrder = s;
 //			}
 //		});
-//
+////
 //		/**
 //		 * create service order
 //		 */
@@ -110,13 +113,13 @@ public class SpringBootConsoleApplication implements CommandLineRunner {
 //		
 //		HttpEntity<ServiceOrderCreate> request = new HttpEntity<>( servOrderCre );
 //		ResponseEntity<ServiceOrder> responseOrder = restTemplate.postForEntity(
-//				"http://localhost:13082/tmf-api/serviceOrdering/v4/serviceOrder",
+//				"http://"+HOST+"/tmf-api/serviceOrdering/v4/serviceOrder",
 //				request,
 //				ServiceOrder.class);
 //
 //
 //		ResponseEntity<ServiceOrder[]> responseServiceOrderList = restTemplate.getForEntity(
-//				"http://localhost:13082/tmf-api/serviceOrdering/v4/serviceOrder",
+//				"http://"+HOST+"/tmf-api/serviceOrdering/v4/serviceOrder",
 //				ServiceOrder[].class);
 //
 //		ServiceOrder sor[] = responseServiceOrderList.getBody();
@@ -132,32 +135,33 @@ public class SpringBootConsoleApplication implements CommandLineRunner {
 //				servOrder.addNoteItem(noteItem);
 //				HttpEntity<ServiceOrderUpdate> requestSo = new HttpEntity<>( servOrder );
 //				ServiceOrder responseSoOrder = restTemplate.patchForObject(
-//						"http://localhost:13082/tmf-api/serviceOrdering/v4/serviceOrder/" + s.getId(),
+//						"http://"+HOST+"/tmf-api/serviceOrdering/v4/serviceOrder/" + s.getId(),
 //						requestSo,
 //						ServiceOrder.class);
 //			}
 //		});
-//		
+		
 		ResponseEntity<ServiceOrder[]> responseServiceOrderList2 = restTemplate.getForEntity(
-				"http://localhost:13082/tmf-api/serviceOrdering/v4/serviceOrder",
+				"http://"+HOST+"/tmf-api/serviceOrdering/v4/serviceOrder",
 				ServiceOrder[].class);
 
 		ServiceOrder sor2[] = responseServiceOrderList2.getBody();
-		System.out.printf(  "--------------SERVICE ORDER------------------ \n" );
-		System.out.printf(  "| %40s | %40s | %40s \n", "id/uuid", "service spec id", "status" );
 		asList(sor2).forEach( (s) -> {
+			System.out.printf(  "|--------------SERVICE ORDER------------------ \n" );
+			System.out.printf(  "| %40s | %40s \n", "id/uuid", "status" );
 			System.out.printf(  "| %40s | %40s \n", s.getId(),   s.getState() );
 			
-			System.out.printf(  "\t--------------ORDER ITEM------------------ \n" );
+			System.out.printf(  "\t|--------------ORDER ITEM------------------ \n" );
 			System.out.printf(  "\t| %40s | %40s | %40s \n", "id/uuid",  "status", "ServiceName" );
 			for (ServiceOrderItem oi : s.getOrderItem()) {
-				System.out.printf(  "| %40s | %40s | %40s \n", oi.getId(),  oi.getState(), oi.getService().getName() );
-				System.out.printf(  "\t\t--------------Supporting Services------------------ \n" );
-				System.out.printf(  "\t\t| %40s | %40s \n", "id/uuid", "name" );
+				System.out.printf(  "\t\t| %40s | %40s | %40s \n", oi.getId(),  oi.getState(), oi.getService().getName() );
+				System.out.printf(  "\t\t|--------------Supporting Services------------------ \n" );
+				System.out.printf(  "\t\t| %40s | %40s | %40s \n", "uuid", "id", "name" );
 				for (ServiceRef sups : oi.getService().getSupportingService()) {
-					System.out.printf(  "\t\\t| %40s | %40s  \n", sups.getId(),  sups.getName() );
+					System.out.printf(  "\t\t| %40s | %40s | %40s  \n", sups.getUuid(),  sups.getId(),  sups.getName() );
 				}
 			}
+			System.out.printf(  "---------------------------------------- \\n\\n" );
 			
 			
 		});
@@ -166,7 +170,7 @@ public class SpringBootConsoleApplication implements CommandLineRunner {
 		//getservices
 		///serviceInventory/v4/
 		ResponseEntity<Service[]> responseServiceList = restTemplate.getForEntity(
-				"http://localhost:13082/tmf-api/serviceInventory/v4/service",
+				"http://"+HOST+"/tmf-api/serviceInventory/v4/service",
 				Service[].class);
 		Service services[] = responseServiceList.getBody();
 		System.out.printf(  "--------------SERVICES ------------------ \n" );
