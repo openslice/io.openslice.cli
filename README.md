@@ -1,2 +1,2 @@
 # io.openslice.cli
-A CLI example
+A CLI example code to interact with the Openslice 
